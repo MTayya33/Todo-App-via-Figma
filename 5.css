@@ -1,0 +1,36 @@
+body{
+    display: flex;
+    flex-direction: column;
+    align-items: center ;
+    height: 100%;
+    font-family: sans-serif;
+}
+.m{
+    position: relative;
+}
+div{
+    justify-content: center;
+    text-align: center;
+    margin: 200px;
+    margin-top: 150px;
+}
+input{
+    margin: 10px;
+    margin-right: 0%;
+    height: 30px;
+    width: 250px;
+}
+#lg{
+    background-color: black;
+    color: aliceblue;
+    border-radius: 15px;
+}
+#show{
+    margin-left:0%;
+    position: absolute;
+    right: 0%;
+    width: 40px;
+    padding: 0%;
+    background-color: transparent;
+    border: none;
+}

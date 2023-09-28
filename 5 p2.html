@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>P2</title>
+    <style>
+        .body {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            padding-top: 20px;
+        }
+
+        button {
+            border: none;
+            background-color: transparent;
+            padding-left: 0px;
+            margin: 2px;
+        }
+
+        .task {
+            background-color: black;
+            color: white;
+            border-radius: 0 20px 20px 0;
+            width: 150px;
+            padding-right: 90px;
+            height: 40px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            width: 300px;
+            height: 550px;
+            margin-right: 20px;
+        }
+
+        .incomplete {
+            width: 900px;
+            align-self: flex-start;
+        }
+
+        .cmp {
+            margin-top: 40px;
+        }
+
+        .popup {
+            justify-self: center;
+            align-self: center;
+            border: none;
+            border-radius: 20px;
+            background-color: aliceblue;
+            position: fixed;
+            visibility: hidden;
+        }
+
+        .opopup {
+            visibility: visible;
+            top: 15%;
+            left: 20%;
+            width: 700px;
+            height: 360px;
+            padding: 50px;
+        }
+
+        input {
+            background-color: transparent;
+            border: none;
+            margin-left: 20px;
+            width: 650px;
+        }
+
+        #dscrpn {
+            height: 100px;
+        }
+
+        #btn {
+            height: 40px;
+            width: 250px;
+            margin: 15px 280px 0px 240px;
+        }
+
+        .save {
+            background-color: black;
+            color: aliceblue;
+            border-radius: 20px;
+        }
+
+        h1 {
+            margin: -20px 0px 60px -20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            display: flex;
+            align-items: center;
+            padding: 0%;
+        }
+
+        ul li input[type="checkbox"] {
+            margin-right: -300px;
+            margin-left: -320px;
+        }
+
+        .remainder {
+            width: 300px;
+            height: 90px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-self: center;
+            align-self: center;
+            border: none;
+            border-radius: 20px;
+            background-color: aliceblue;
+            position: fixed;
+            right: 0;
+            top: 5px;
+            visibility: hidden;
+        }
+
+        .orem {
+            visibility: visible;
+        }
+
+        #c {
+            margin-left: 20px;
+        }
+
+        #rbtn {
+            margin-left: 0px;
+            padding-left: 140px;
+            background-color: darkgray;
+            border: none;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+
+<body class="body" id="body">
+    <div id="popup" class="popup">
+        <h1>New Task</h1>
+        <img src="summary.png"><input type="text" placeholder="Summary" id="smry" required><br>
+        <hr>
+        <img src="description.png"><input type="text" placeholder="Description" id="dscrpn"><br>
+        <hr>
+        <img src="date.png"><input type="date" placeholder="Due date" id="date" required><br>
+        <hr>
+        <button class="save" id="btn" onclick="save_task()" type="submit">Save</button><br>
+        <button id="btn" onclick="cpopup()">cancel</button>
+    </div>
+    <div class="btn">
+        <button class="task"><img src="taskw.png">Tasks</button><br>
+        <button onclick="location.href='5 p3.html'"><img src="locb.png">Location</button>
+    </div>
+    <div class="incomplete">
+        <button onclick="opopup()">+ Add new task</button>
+        <h4>Incomplete</h4>
+        <ul id="inclist">
+
+        </ul>
+        <div class="cmp">
+            <h4>Completed</h4>
+            <ul id="clist">
+
+            </ul>
+        </div>
+    </div>
+    <div class="remainder" id="remainder">
+        <p>
+            <b> Submit my resume </b><br> Send my resume to DigitalTolk
+        </p>
+        <div id="c">
+            <img src="clock.png">
+        </div>
+
+        <div id="rbtn">
+            <button onclick="skip()">Skip</button><button onclick="later()">Remind me later</button>
+        </div>
+    </div>
+    <div>
+        <button onclick="location.href='5 Todo app figma.html'"><img src="logout.png">Logout</button>
+    </div>
+    <script>
+        let r = document.getElementById('remainder');
+        let popup = document.getElementById("popup");
+        setTimeout(() => {
+            r.classList.add('orem');
+        }, 5000);
+        function later() {
+            r.classList.remove('orem');
+            int = 10000;
+            setTimeout(() => {
+                r.classList.add('orem');
+            }, 10000);
+        }
+        function skip() {
+            r.classList.remove('orem');
+        }
+        function opopup() {
+            popup.classList.add("opopup");
+        }
+        function cpopup() {
+            popup.classList.remove("opopup");
+        }
+        let inclist = document.getElementById('inclist');
+        let clist = document.getElementById('clist');
+        function save_task() {
+            let t = document.getElementById("smry").value;
+            let d = "<br> " + document.getElementById('date').value;
+            d = d.toString();
+            if (t.trim() === "") {
+                return false;
+            } else {
+                text = t + "<br>" + d;
+                popup.classList.remove("opopup");
+                let newitm = document.createElement("li");
+                let chkbx = document.createElement("input");
+                chkbx.type = "checkbox";
+                let image = document.createElement("img");
+                image.src = 'date.png';
+                newitm.appendChild(chkbx);
+                let tSpan = document.createElement("span");
+                let tStrong = document.createElement("strong");
+                tStrong.innerHTML = t;
+                tSpan.appendChild(tStrong);
+                let div = document.createElement("div");
+                div.appendChild(tSpan);
+                div.appendChild(image);
+                let dSpan = document.createElement("span");
+                dSpan.innerHTML = d;
+                div.appendChild(dSpan);
+                newitm.appendChild(div);
+                inclist.appendChild(newitm);
+                document.getElementById('smry').value = "";
+                document.getElementById('date').value = "";
+            }
+        }
+        inclist.addEventListener('click', function (e) {
+            if (e.target.tagName == 'INPUT') {
+                clist.appendChild(e.target.parentElement);
+                inclist.removeChild(e.target.parentElement);
+            }
+        })
+        clist.addEventListener('click', function (f) {
+            if (f.target.tagName == 'INPUT') {
+                ;
+                inclist.appendChild(f.target.parentElement);
+                clist.removeChild(f.target.parentElement);
+            }
+        })
+
+    </script>
+</body>
+
+</html>

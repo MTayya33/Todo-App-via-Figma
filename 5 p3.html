@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>P3</title>
+    <style>
+        body {
+            display: flex;
+            flex-wrap: wrap;
+            padding-top: 20px;
+        }
+
+        button {
+            border: none;
+            background-color: transparent;
+            padding-left: 0px;
+        }
+
+        .loc {
+            background-color: black;
+            color: white;
+            border-radius: 0 20px 20px 0;
+            width: 150px;
+            padding-right: 80px;
+            height: 40px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            width: 300px;
+            height: 580px;
+            margin-right: 20px;
+        }
+
+        .location {
+            width: 900px;
+        }
+
+        .ploc {
+            margin-top: 40px;
+        }
+
+        ul {
+            list-style: url(📍.png);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="btn">
+        <button onclick="location.href='5 p2.html'" id="btn"><img src="taskb.png">Tasks</button><br>
+        <button class="loc"><img src="locw.png">Location</button>
+    </div>
+    <div class="location">
+        <button onclick="add_loc()">+ Check In</button>
+        <h4>Current location</h4>
+        <ul id="loca">
+        </ul>
+        <div class="ploc">
+            <h4>Previous location</h4>
+            <ul id="ploc">
+            </ul>
+        </div>
+    </div>
+    <div>
+        <button onclick="location.href='5 Todo app figma.html'"><img src="logout.png">Logout</button>
+    </div>
+    <script>
+        function add_loc() {
+            const loli = document.getElementById('loca').querySelector('li');
+            console.log(loli);
+            if (loli != null) {
+            document.getElementById('ploc').appendChild(loli);
+            document.getElementById('loca').innerHTML == "";
+            }
+            navigator.geolocation.getCurrentPosition(suc, err);
+        }
+        function suc(pos) {
+            const longitude = pos.coords.longitude;
+            const latitude = pos.coords.latitude;
+            console.log(longitude);
+            const latitudeDegrees = parseFloat(((latitude * 180) / Math.PI).toFixed(6));
+            const longitudeDegrees = parseFloat(((longitude * 180) / Math.PI).toFixed(6));
+            const apiKey = 'YOUR_OPENSTREETMAP_API_KEY';
+            const geourl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&key=${apiKey}`
+            fetch(geourl)
+                .then(response => response.json())
+                .then(data => {
+                    const loc = data.display_name;
+                    loc.toString();
+                    let location = "";
+                    for (const i of loc) {
+                        if (i == ",") {
+                            break;
+                        }
+                        location += i;
+                    }
+                    location += `<br>${latitudeDegrees}\u00b0 N, ${longitude}\u00b0 E`
+                    let itm = document.createElement('li');
+                    itm.innerHTML = location;
+                    document.getElementById('loca').appendChild(itm);
+                })
+        }
+        function err() {
+            console.log("error");
+        }
+    </script>
+</body>
+
+</html>
