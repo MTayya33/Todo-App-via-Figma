@@ -1,11 +1,30 @@
+
+let mail = document.getElementById('mail');
+let pass = document.getElementById('pass');
+let showhide = document.getElementById("show");
 function show() {
-    let a = document.getElementById("pass");
-    let b = document.getElementById("show");
-    if (b.value == "show") {
-        a.type = "text";
-        b.value = "hide";
+    if (showhide.value == "show") {
+        pass.type = "text";
+        showhide.value = "hide";
     } else {
-        a.type = "password";
-        b.value = "show";
+        pass.type = "password";
+        showhide.value = "show";
+    }
+}
+function login() {
+    if (mail.value == "" || pass.value == "") {
+        console.log(mail.value,pass.value);
+        return;
+    } else {
+        if (localStorage.getItem(mail.value) == null) {
+            localStorage.setItem(mail.value, pass.value);
+            window.location.href = '5 p2.html';
+        } else {
+            if (pass.value == localStorage.getItem(mail.value)) {
+                window.location.href = '5 p2.html';
+            } else {
+                prompt("Wrong Password");
+            }
+        }
     }
 }
