@@ -98,6 +98,7 @@
             display: flex;
             align-items: center;
             padding: 0%;
+            margin-bottom: 20px;
         }
 
         ul li input[type="checkbox"] {
@@ -140,6 +141,7 @@
 </head>
 
 <body class="body" id="body">
+
     <div id="popup" class="popup">
         <h1>New Task</h1>
         <img src="summary.png"><input type="text" placeholder="Summary" id="smry" required><br>
@@ -151,27 +153,34 @@
         <button class="save" id="btn" onclick="save_task()" type="submit">Save</button><br>
         <button id="btn" onclick="cpopup()">cancel</button>
     </div>
+
     <div class="btn">
         <button class="task"><img src="taskw.png">Tasks</button><br>
         <button onclick="location.href='5 p3.html'"><img src="locb.png">Location</button>
     </div>
+
     <div class="incomplete">
         <button onclick="opopup()">+ Add new task</button>
         <h4>Incomplete</h4>
         <ul id="inclist">
 
         </ul>
+
         <div class="cmp">
             <h4>Completed</h4>
             <ul id="clist">
 
             </ul>
         </div>
+
     </div>
+
     <div class="remainder" id="remainder">
+
         <p>
             <b> Submit my resume </b><br> Send my resume to DigitalTolk
         </p>
+
         <div id="c">
             <img src="clock.png">
         </div>
@@ -179,16 +188,42 @@
         <div id="rbtn">
             <button onclick="skip()">Skip</button><button onclick="later()">Remind me later</button>
         </div>
+
     </div>
+
     <div>
         <button onclick="location.href='5 Todo app figma.html'"><img src="logout.png">Logout</button>
     </div>
+
     <script>
+
+        let inclist = document.getElementById('inclist');
+        let activeMail = localStorage.getItem("activeMail");
+
+        if (activeMail) {
+
+            let tasks = JSON.parse(localStorage.getItem(activeMail + "tasks")) || [];
+            
+            tasks.forEach((task) => {
+                let t = "";
+                let d = "";
+                for (const key in task) {
+                    if (key == "text") {
+                        t = task[key];
+                    } else {
+                        d = task[key];
+                    }
+                }
+                print(t,d);
+            });
+
+        }
+
         let r = document.getElementById('remainder');
         let popup = document.getElementById("popup");
-        setTimeout(() => {
-            r.classList.add('orem');
-        }, 5000);
+
+        setTimeout(() => { r.classList.add('orem');} , 5000);
+
         function later() {
             r.classList.remove('orem');
             int = 10000;
@@ -196,61 +231,96 @@
                 r.classList.add('orem');
             }, 10000);
         }
+
         function skip() {
             r.classList.remove('orem');
         }
+
         function opopup() {
             popup.classList.add("opopup");
         }
+
         function cpopup() {
             popup.classList.remove("opopup");
         }
-        let inclist = document.getElementById('inclist');
+
         let clist = document.getElementById('clist');
+
         function save_task() {
+
+            let tasks = JSON.parse(localStorage.getItem(activeMail + "tasks")) || [];
+            
             let t = document.getElementById("smry").value;
-            let d = "<br> " + document.getElementById('date').value;
+            let d = document.getElementById('date').value;
             d = d.toString();
+
             if (t.trim() === "") {
                 return false;
             } else {
-                text = t + "<br>" + d;
+
                 popup.classList.remove("opopup");
-                let newitm = document.createElement("li");
-                let chkbx = document.createElement("input");
-                chkbx.type = "checkbox";
-                let image = document.createElement("img");
-                image.src = 'date.png';
-                newitm.appendChild(chkbx);
-                let tSpan = document.createElement("span");
-                let tStrong = document.createElement("strong");
-                tStrong.innerHTML = t;
-                tSpan.appendChild(tStrong);
-                let div = document.createElement("div");
-                div.appendChild(tSpan);
-                div.appendChild(image);
-                let dSpan = document.createElement("span");
-                dSpan.innerHTML = d;
-                div.appendChild(dSpan);
-                newitm.appendChild(div);
-                inclist.appendChild(newitm);
+
+                print(t,d);
+
+                let task = {
+                    text: t,
+                    date: d
+                };
+
+                tasks.push(task);
+                localStorage.setItem(activeMail + "tasks", JSON.stringify(tasks));
+
                 document.getElementById('smry').value = "";
                 document.getElementById('date').value = "";
             }
         }
+
         inclist.addEventListener('click', function (e) {
             if (e.target.tagName == 'INPUT') {
+                let text
                 clist.appendChild(e.target.parentElement);
                 inclist.removeChild(e.target.parentElement);
+                tasks.splice(e.target.parentElement.index, 1);
+                localStorage.setItem(activeMail + "tasks", JSON.stringify(tasks));
             }
-        })
+        });
+
         clist.addEventListener('click', function (f) {
             if (f.target.tagName == 'INPUT') {
-                ;
+                
                 inclist.appendChild(f.target.parentElement);
                 clist.removeChild(f.target.parentElement);
             }
-        })
+        });
+
+        function print(t, d) {
+
+            let newitm = document.createElement("li");
+            let chkbx = document.createElement("input");
+            chkbx.type = "checkbox";
+            newitm.appendChild(chkbx);
+
+            let tSpan = document.createElement("span");
+            let tStrong = document.createElement("strong");
+            tStrong.innerHTML = t;
+            tSpan.appendChild(tStrong);
+
+            let div = document.createElement("div");
+            let lbreak = document.createElement("br");
+            div.appendChild(tSpan);
+            div.appendChild(lbreak);
+
+            let image = document.createElement("img");
+            image.src = 'date.png';
+            div.appendChild(image);
+
+            let dSpan = document.createElement("span");
+            dSpan.innerHTML = d;
+            div.appendChild(dSpan)
+
+            newitm.appendChild(div);
+            inclist.appendChild(newitm);
+        }
 
     </script>
 </body>
