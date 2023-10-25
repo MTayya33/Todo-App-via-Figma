@@ -197,36 +197,26 @@
 
     <script>
 
+        let tasks = [];
+        let ctasks = [];
         let inclist = document.getElementById('inclist');
         let activeMail = localStorage.getItem("activeMail");
 
         if (activeMail) {
 
-            let tasks = JSON.parse(localStorage.getItem(activeMail + "tasks")) || [];
-            
-            tasks.forEach((task) => {
-                let t = "";
-                let d = "";
-                for (const key in task) {
-                    if (key == "text") {
-                        t = task[key];
-                    } else {
-                        d = task[key];
-                    }
-                }
-                print(t,d);
-            });
+            tasks = JSON.parse(localStorage.getItem(activeMail + "tasks")) || [];
+
+            tasks.forEach((task) => { print(task.text, task.date); });
 
         }
 
         let r = document.getElementById('remainder');
         let popup = document.getElementById("popup");
 
-        setTimeout(() => { r.classList.add('orem');} , 5000);
+        setTimeout(() => { r.classList.add('orem'); }, 5000);
 
         function later() {
             r.classList.remove('orem');
-            int = 10000;
             setTimeout(() => {
                 r.classList.add('orem');
             }, 10000);
@@ -248,8 +238,6 @@
 
         function save_task() {
 
-            let tasks = JSON.parse(localStorage.getItem(activeMail + "tasks")) || [];
-            
             let t = document.getElementById("smry").value;
             let d = document.getElementById('date').value;
             d = d.toString();
@@ -260,15 +248,8 @@
 
                 popup.classList.remove("opopup");
 
-                print(t,d);
-
-                let task = {
-                    text: t,
-                    date: d
-                };
-
-                tasks.push(task);
-                localStorage.setItem(activeMail + "tasks", JSON.stringify(tasks));
+                print(t, d);
+                locladd(t, d);
 
                 document.getElementById('smry').value = "";
                 document.getElementById('date').value = "";
@@ -276,21 +257,39 @@
         }
 
         inclist.addEventListener('click', function (e) {
+
             if (e.target.tagName == 'INPUT') {
-                let text
-                clist.appendChild(e.target.parentElement);
-                inclist.removeChild(e.target.parentElement);
-                tasks.splice(e.target.parentElement.index, 1);
+
+                const listItem = e.target.parentElement;
+                const index = Array.from(listItem.parentElement.children).indexOf(listItem);
+                clist.appendChild(listItem);
+                ctasks.push(tasks[index]);
+
+                tasks.splice(index, 1);
                 localStorage.setItem(activeMail + "tasks", JSON.stringify(tasks));
+                inclist.removeChild(listItem);
             }
+
         });
 
         clist.addEventListener('click', function (f) {
+
             if (f.target.tagName == 'INPUT') {
                 
-                inclist.appendChild(f.target.parentElement);
-                clist.removeChild(f.target.parentElement);
+                const listItem = f.target.parentElement;
+                const index = Array.from(listItem.parentElement.children).indexOf(listItem);
+
+                const tsk = ctasks[index];
+                let t = tsk.text;
+                let d = tsk.date;
+
+                print(t , d);
+                locladd(t , d);
+
+                ctasks.splice(index,1);
+                clist.removeChild(listItem);
             }
+
         });
 
         function print(t, d) {
@@ -321,6 +320,17 @@
             newitm.appendChild(div);
             inclist.appendChild(newitm);
         }
+
+        function locladd(t, d) {
+
+            let task = {
+                    text: t,
+                    date: d
+                };
+
+                tasks.push(task);
+                localStorage.setItem(activeMail + "tasks", JSON.stringify(tasks));
+        } 
 
     </script>
 </body>
