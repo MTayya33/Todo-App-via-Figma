@@ -1,36 +1,20 @@
-body{
-    display: flex;
-    flex-direction: column;
-    align-items: center ;
-    height: 100%;
-    font-family: sans-serif;
-}
-.m{
-    position: relative;
-}
 div{
-    justify-content: center;
-    text-align: center;
-    margin: 200px;
-    margin-top: 150px;
+    height: 296px;
+    width: 343px;
 }
-input{
-    margin: 10px;
-    margin-right: 0%;
-    height: 30px;
-    width: 250px;
+
+#mail,#pass{
+    height: 50px;
+    width: 343px;
+    background-color: #E8E8E8;
 }
-#lg{
-    background-color: black;
-    color: aliceblue;
-    border-radius: 15px;
-}
+
 #show{
-    margin-left:0%;
-    position: absolute;
-    right: 0%;
-    width: 40px;
-    padding: 0%;
-    background-color: transparent;
-    border: none;
+    margin-left: -54px;
+}
+
+#lg{
+    height: 50px;
+    width: 343px;
+    margin-top: 30px;
 }
