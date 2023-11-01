@@ -11,8 +11,8 @@
             background-color: white;
         }
 
-        .obody{
-            background:rgba(0, 0, 0, 0.40);
+        .obody {
+            background: rgba(0, 0, 0, 0.40);
         }
 
         button {
@@ -38,6 +38,13 @@
             flex-wrap: wrap;
             width: 300px;
             height: 300px;
+        }
+
+        .digi,
+        #date,
+        h4,
+        h5 {
+            color: #575767;
         }
 
         .incomplete {
@@ -123,8 +130,16 @@
             background-color: #F6F5F5;
         }
 
+        input [type="checkbox"] {
+            width: 24px;
+            height: 24px;
+        }
     </style>
 </head>
+
+
+
+
 
 <body class="body container-fluid pt-4" id="body">
 
@@ -147,14 +162,14 @@
 
         <button class="task bg-dark border-0 text-white rounded-start rounded-pill"><img src="taskw.png">
             Tasks</button><br>
-        <button onclick="location.href='5 p3.html'" class="loc ps-4"><img src="locb.png">Location</button>
+        <button onclick="location.href='5 p3.html'" class="loc ps-4"><img src="locb.png"> Location</button>
 
     </div>
 
     <div class="remainder position-absolute end-0 top-0 border-0 rounded-3 mt-4 bg-white" id="remainder">
 
         <p>
-            <b> Submit my resume </b><br> Send my resume to DigitalTolk
+            <b> Submit my resume </b><br> <span class="digi">Send my resume to DigitalTolk</span>
         </p>
 
         <div class="ms-1">
@@ -171,12 +186,14 @@
 
         <div class="incomplete ">
 
-            <button onclick="opopup()">+ Add new task</button>
-            <h4>Incomplete</h4>
+            <button onclick="opopup()" class="mb-3">
+                <h5>+ Add new task</h5>
+            </button>
+            <h4 class="ms-1">Incomplete</h4>
             <ul id="inclist">
 
             </ul>
-            <div class="mt-5">
+            <div class="mt-5 ms-1">
                 <h4>Completed</h4>
                 <ul id="clist">
 
@@ -187,17 +204,24 @@
 
         <div class="position-absolute bottom-0 start-0">
 
-            <button onclick="location.href='5 Todo app figma.html'" class="lg ps-4"><img src="logout.png">Logout</button>
+            <button onclick="location.href='5 Todo app figma.html'" class="lg ps-4"><img
+                    src="logout.png">Logout</button>
 
         </div>
 
     </div>
+
+
+
+
     <script>
 
         let tasks = [];
         let ctasks = [];
         let inclist = document.getElementById('inclist');
         let activeMail = localStorage.getItem("activeMail");
+
+        console.log(activeMail);
 
         if (activeMail) {
 
@@ -211,7 +235,7 @@
         let popup = document.getElementById("popup");
         let o = document.getElementById("body");
 
-        setTimeout(() => {r.classList.add('orem');}, 5000);
+        setTimeout(() => { r.classList.add('orem'); }, 5000);
 
         function later() {
             r.classList.remove('orem');
@@ -247,6 +271,7 @@
             } else {
 
                 popup.classList.remove("opopup");
+                o.classList.remove("obody");
 
                 print(t, d);
                 locladd(t, d);
@@ -303,6 +328,8 @@
             let tStrong = document.createElement("strong");
             tStrong.innerHTML = t;
             tSpan.appendChild(tStrong);
+            tSpan.style.fontSize = '18px';
+            tSpan.style.color = '#575767';
 
             let div = document.createElement("div");
             let lbreak = document.createElement("br");
@@ -311,11 +338,15 @@
 
             let image = document.createElement("img");
             image.src = 'date.png';
+            image.style.width = '14px';
+            image.style.height = '14px';
             div.appendChild(image);
 
             let dSpan = document.createElement("span");
             dSpan.innerHTML = d;
-            div.appendChild(dSpan)
+            dSpan.style.fontSize = '14px';
+            dSpan.style.color = '#B9B9BE';
+            div.appendChild(dSpan);
 
             newitm.appendChild(div);
             inclist.appendChild(newitm);

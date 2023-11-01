@@ -2,38 +2,46 @@
 <html lang="en">
 
 <head>
+
     <title>P3</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
             display: flex;
             flex-wrap: wrap;
-            padding-top: 20px;
         }
 
         button {
             border: none;
             background-color: transparent;
-            padding-left: 0px;
+        }
+
+        .task,
+        .loc,
+        .lg {
+            width: 250px;
+            height: 55px;
+            padding-right: 100px;
+            padding-left: 10px;
+            margin-bottom: 20px;
         }
 
         .loc {
-            background-color: black;
-            color: white;
-            border-radius: 0 20px 20px 0;
-            width: 150px;
-            padding-right: 80px;
-            height: 40px;
-            margin-top: 20px;
+            margin-top: -120px;
         }
 
         .btn {
+            display: flex;
+            flex-wrap: wrap;
             width: 300px;
-            height: 580px;
-            margin-right: 20px;
+            height: 300px;
         }
 
         .location {
-            width: 900px;
+            width: 500px;
+            margin-left: 400px;
+            color: #575767;
         }
 
         .ploc {
@@ -43,67 +51,150 @@
         ul {
             list-style: url(📍.png);
         }
+
+        li {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 
-<body>
-    <div class="btn">
-        <button onclick="location.href='5 p2.html'" id="btn"><img src="taskb.png">Tasks</button><br>
-        <button class="loc"><img src="locw.png">Location</button>
+
+
+
+<body class="container-fluid pt-5">
+
+    <div class="btn position-absolute start-0 top-0 d-flex align-items-start mt-4 p-0">
+
+        <button onclick="location.href='5 p2.html'" id="btn" class="task "><img src="taskb.png"> Tasks</button><br>
+        <button class="loc bg-dark text-white border-0 rounded-pill rounded-start ps-4"><img src="locw.png">
+            Location</button>
+
     </div>
-    <div class="location">
-        <button onclick="add_loc()">+ Check In</button>
+
+    <div class="location ">
+
+        <button onclick="add_locs()" style="color: #575767; margin-bottom: 15px;">
+            <h5>+ Check In</h5>
+        </button>
         <h4>Current location</h4>
-        <ul id="loca">
+        <ul id="cloc">
+
         </ul>
+
         <div class="ploc">
+
             <h4>Previous location</h4>
             <ul id="ploc">
+
             </ul>
+
         </div>
+
     </div>
-    <div>
-        <button onclick="location.href='5 Todo app figma.html'"><img src="logout.png">Logout</button>
+
+    <div class="position-absolute start-0 bottom-0">
+
+        <button onclick="location.href='5 Todo app figma.html'" class="lg ps-4"><img src="logout.png">Logout</button>
+
     </div>
+
+
+
     <script>
-        function add_loc() {
-            const loli = document.getElementById('loca').querySelector('li');
-            console.log(loli);
-            if (loli != null) {
-            document.getElementById('ploc').appendChild(loli);
-            document.getElementById('loca').innerHTML == "";
-            }
-            navigator.geolocation.getCurrentPosition(suc, err);
+
+        let activeMail = localStorage.getItem("activeMail");
+
+        let cloc = [1];
+        let ploc = [5];
+
+        if (activeMail) {
+
+            cloc = JSON.parse(localStorage.getItem(activeMail + "cloc")) || [1];
+            cloc.forEach((clo) => { add_cloc(clo.latitude, clo.longitude, "cloc"); });
+
+            ploc = JSON.parse(localStorage.getItem(activeMail + "ploc")) || [5];
+            ploc.forEach((plo) => { add_cloc(plo.latitude, plo.longitude, "ploc"); });
         }
+
+        function add_locs() {
+
+            navigator.geolocation.getCurrentPosition(suc, err);
+
+        }
+
         function suc(pos) {
+
+            const loli = document.getElementById('cloc').querySelector('li');
+
+            if (loli != null) {
+
+                ploc.push(cloc[0]);
+                localStorage.setItem(activeMail + "ploc", JSON.stringify(ploc));
+
+                document.getElementById('ploc').appendChild(loli);
+                document.getElementById('cloc').innerHTML == "";
+
+            }
+
             const longitude = pos.coords.longitude;
             const latitude = pos.coords.latitude;
-            console.log(longitude);
-            const latitudeDegrees = parseFloat(((latitude * 180) / Math.PI).toFixed(6));
-            const longitudeDegrees = parseFloat(((longitude * 180) / Math.PI).toFixed(6));
-            const apiKey = 'YOUR_OPENSTREETMAP_API_KEY';
-            const geourl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&key=${apiKey}`
-            fetch(geourl)
-                .then(response => response.json())
-                .then(data => {
-                    const loc = data.display_name;
-                    loc.toString();
-                    let location = "";
-                    for (const i of loc) {
-                        if (i == ",") {
-                            break;
-                        }
-                        location += i;
-                    }
-                    location += `<br>${latitudeDegrees}\u00b0 N, ${longitude}\u00b0 E`
-                    let itm = document.createElement('li');
-                    itm.innerHTML = location;
-                    document.getElementById('loca').appendChild(itm);
-                })
+
+            cloc = [{
+                latitude: latitude,
+                longitude: longitude
+            }]
+
+            localStorage.setItem(activeMail + "cloc", JSON.stringify(cloc));
+
+            add_cloc(latitude, longitude, "cloc");
+
         }
+
         function err() {
-            console.log("error");
+            prompt("error");
         }
+
+        function add_cloc(lat, lon, ID) {
+
+            if (lat != null && lon != null && ID != null) {
+
+                const latitudeDegrees = parseFloat(((lat * 180) / Math.PI).toFixed(6));
+                const longitudeDegrees = parseFloat(((lon * 180) / Math.PI).toFixed(6));
+
+                const apiKey = 'YOUR_OPENSTREETMAP_API_KEY';
+                const geourl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&key=${apiKey}`
+
+                fetch(geourl)
+                    .then(response => response.json())
+                    .then(data => {
+
+                        const loc = data.display_name;
+                        const location = loc.split(',')[0];
+
+                        const locspan = document.createElement('span');
+                        locspan.style.fontSize = '18px';
+                        locspan.style.color = '#575767';
+                        locspan.textContent = location;
+
+                        const degspan = document.createElement('span');
+                        degspan.style.fontSize = '14px';
+                        degspan.style.color = '#B9B9BE';
+                        degspan.textContent = `${latitudeDegrees}\u00b0 N, ${longitudeDegrees}\u00b0 E`;
+
+                        let br = document.createElement("br");
+
+                        let itm = document.createElement('li');
+
+                        itm.appendChild(locspan);
+                        itm.appendChild(br);
+                        itm.appendChild(degspan);
+                        document.getElementById(ID).appendChild(itm);
+
+                    })
+            }
+
+        }
+
     </script>
 </body>
 
