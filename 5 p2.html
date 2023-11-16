@@ -109,8 +109,10 @@
         }
 
         ul li input[type="checkbox"] {
-            margin-right: -300px;
-            margin-left: -320px;
+            margin-right: -285px;
+            margin-left: -296px;
+            margin-top: -15px;
+            height: 24px;
         }
 
         .remainder {
@@ -129,12 +131,8 @@
             padding-left: 100px;
             background-color: #F6F5F5;
         }
-
-        input [type="checkbox"] {
-            width: 24px;
-            height: 24px;
-        }
     </style>
+
 </head>
 
 
@@ -177,7 +175,7 @@
         </div>
 
         <div id="rbtn" class="border-0 rounded-pill">
-            <button onclick="skip()">Skip</button><button onclick="later()">Remind me later</button>
+            <button id="btnskp">Skip</button><button id="btnrm">Remind me later</button>
         </div>
 
     </div>
@@ -218,10 +216,23 @@
 
         let tasks = [];
         let ctasks = [];
+        let dates = [];
+
+        let dt = new Date();
+        dt.setDate(dt.getDate() + 3);
+
+        let r = document.getElementById('remainder');
+        let popup = document.getElementById("popup");
+        let o = document.getElementById("body");
+
+        let clist = document.getElementById('clist');
         let inclist = document.getElementById('inclist');
         let activeMail = localStorage.getItem("activeMail");
 
-        console.log(activeMail);
+        let btnrm = document.getElementById('btnrm');
+        let btnskp = document.getElementById('btnskp');
+
+
 
         if (activeMail) {
 
@@ -229,36 +240,81 @@
 
             tasks.forEach((task) => { print(task.text, task.date); });
 
+            showRemainder();
+
         }
+        
 
-        let r = document.getElementById('remainder');
-        let popup = document.getElementById("popup");
-        let o = document.getElementById("body");
+        function showRemainder() {
 
-        setTimeout(() => { r.classList.add('orem'); }, 5000);
-
-        function later() {
             r.classList.remove('orem');
-            setTimeout(() => {
-                r.classList.add('orem');
-            }, 10000);
+
+            for (const i in dates) {
+
+                let t = new Date(i);
+
+                if (t.getTime() < dt.getTime()) {
+
+                    remainder();
+
+                }
+
+            }
+
         }
 
-        function skip() {
-            r.classList.remove('orem');
+
+        function showRemaindr(d) {
+
+            let t = new Date(d);
+            
+            if (t.getTime() < dt.getTime()) {
+
+                remainder();
+
+            }
+
         }
+
+
+        function remainder() {
+
+            setTimeout(() => { r.classList.add('orem'); }, 5000);
+
+            btnrm.addEventListener('click', function () {
+
+                r.classList.remove('orem');
+                setTimeout(() => {
+                    r.classList.add('orem');
+                }, 10000);
+
+            })
+
+            btnskp.addEventListener('click', function () {
+
+                r.classList.remove('orem');
+
+            })
+            return;
+
+        }
+
 
         function opopup() {
+
             popup.classList.add("opopup");
             o.classList.add('obody');
+
         }
+
 
         function cpopup() {
+
             popup.classList.remove("opopup");
             o.classList.remove("obody");
+
         }
 
-        let clist = document.getElementById('clist');
 
         function save_task() {
 
@@ -275,11 +331,15 @@
 
                 print(t, d);
                 locladd(t, d);
+                showRemaindr(d);
 
                 document.getElementById('smry').value = "";
                 document.getElementById('date').value = "";
+
             }
+
         }
+
 
         inclist.addEventListener('click', function (e) {
 
@@ -287,15 +347,39 @@
 
                 const listItem = e.target.parentElement;
                 const index = Array.from(listItem.parentElement.children).indexOf(listItem);
-                clist.appendChild(listItem);
+
+                let li = document.createElement('li');
+                let chkbx = document.createElement("input");
+                chkbx.type = "checkbox";
+                chkbx.style.marginTop = '2px'
+                chkbx.checked = 'true';
+
+                let tSpan = document.createElement("span");
+                let tStrong = document.createElement("strong");
+                tStrong.innerHTML = tasks[index].text;
+                tSpan.appendChild(tStrong);
+
+                tSpan.style.fontSize = '18px';
+                tSpan.style.color = '#575767';
+
+                li.appendChild(chkbx);
+                li.appendChild(tSpan);
+                clist.appendChild(li);
+
                 ctasks.push(tasks[index]);
 
+                dates.splice(index, 1);
                 tasks.splice(index, 1);
+
+                showRemainder();
+
                 localStorage.setItem(activeMail + "tasks", JSON.stringify(tasks));
                 inclist.removeChild(listItem);
+
             }
 
         });
+
 
         clist.addEventListener('click', function (f) {
 
@@ -310,6 +394,7 @@
 
                 print(t, d);
                 locladd(t, d);
+                showRemaindr(d);
 
                 ctasks.splice(index, 1);
                 clist.removeChild(listItem);
@@ -317,7 +402,10 @@
 
         });
 
+
         function print(t, d) {
+
+            dates.push(d);
 
             let newitm = document.createElement("li");
             let chkbx = document.createElement("input");
@@ -350,7 +438,11 @@
 
             newitm.appendChild(div);
             inclist.appendChild(newitm);
+
+            return;
+
         }
+
 
         function locladd(t, d) {
 
@@ -362,6 +454,7 @@
             tasks.push(task);
             localStorage.setItem(activeMail + "tasks", JSON.stringify(tasks));
         }
+
 
     </script>
 </body>

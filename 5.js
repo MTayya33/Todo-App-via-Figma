@@ -11,10 +11,11 @@ function show() {
         showhide.value = "show";
     }
 }
+localStorage.clear()
 function login() {
     if (mail.value == "" || pass.value == "") {
         return;
-    } else {
+    } else {  
         if (localStorage.getItem(mail.value) == null) {
             localStorage.setItem(mail.value, pass.value);
             localStorage.setItem("activeMail" , mail.value);
@@ -24,7 +25,7 @@ function login() {
                 localStorage.setItem("activeMail" , mail.value);
                 window.location.href = '5 p2.html';
             } else {
-                prompt("Wrong Password");
+                alert("Wrong Password");
             }
         }
     }

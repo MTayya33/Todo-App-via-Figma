@@ -55,6 +55,7 @@
         li {
             margin-bottom: 20px;
         }
+
     </style>
 </head>
 
@@ -124,14 +125,14 @@
 
         function suc(pos) {
 
-            const loli = document.getElementById('cloc').querySelector('li');
+            const locli = document.getElementById('cloc').querySelector('li');
 
-            if (loli != null) {
+            if (locli != null) {
 
                 ploc.push(cloc[0]);
                 localStorage.setItem(activeMail + "ploc", JSON.stringify(ploc));
 
-                document.getElementById('ploc').appendChild(loli);
+                document.getElementById('ploc').appendChild(locli);
                 document.getElementById('cloc').innerHTML == "";
 
             }
