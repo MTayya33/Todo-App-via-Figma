@@ -77,6 +77,7 @@
         <button onclick="add_locs()" style="color: #575767; margin-bottom: 15px;">
             <h5>+ Check In</h5>
         </button>
+        
         <h4>Current location</h4>
         <ul id="cloc">
 
@@ -180,7 +181,7 @@
                         const degspan = document.createElement('span');
                         degspan.style.fontSize = '14px';
                         degspan.style.color = '#B9B9BE';
-                        degspan.textContent = `${latitudeDegrees}\u00b0 N, ${longitudeDegrees}\u00b0 E`;
+                        degspan.textContent = `${latitudeDegrees}° N, ${longitudeDegrees}° E`;
 
                         let br = document.createElement("br");
 
